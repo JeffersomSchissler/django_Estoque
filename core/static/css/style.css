@@ -1,0 +1,143 @@
+:root {
+  --blue-dark-1: #0a2342;
+  --blue-dark-2: #112d56;
+  --blue-dark-3: #163a70;
+  --green-bright: #22c55e;
+  --input-bg: #1f2937;
+  --input-text: #e5e7eb;
+  --placeholder-color: #94a3b8;
+  --button-text: #f8fafc;
+  --link-color: #60a5fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, var(--blue-dark-1), var(--blue-dark-2));
+  color: var(--input-text);
+}
+
+.login-wrapper {
+  display: flex;
+  height: calc(100vh - 120px); 
+  max-width: 900px;
+  margin: 60px auto; 
+  padding: 0; 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border-radius: 20px 0 0 20px;
+  overflow: visible;
+}
+
+.login-form-side {
+  flex: 1;
+  background: linear-gradient(180deg, var(--blue-dark-3), var(--blue-dark-2));
+  padding: 60px 40px;
+  margin: 0; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 25px;
+  border-radius: 20px 0 0 20px;
+}
+
+
+.login-form-side h2 {
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 40px;
+  color: var(--button-text);
+}
+
+.login-form-side form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-form-side input[type="text"],
+.login-form-side input[type="password"] {
+  border-radius: 40px;
+  border: none;
+  padding: 18px 30px;
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  font-size: 16px;
+  outline: none;
+}
+
+.login-form-side input::placeholder {
+  color: var(--placeholder-color);
+}
+
+.login-form-side input:focus {
+  box-shadow: 0 0 10px var(--green-bright);
+}
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: var(--placeholder-color);
+}
+
+.form-footer a {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.form-footer a:hover {
+  color: var(--button-text);
+}
+
+.form-footer label input[type="checkbox"] {
+  margin-right: 8px;
+  accent-color: var(--green-bright);
+}
+
+.login-form-side button {
+  border-radius: 40px;
+  padding: 18px 0;
+  border: none;
+  background-color: var(--green-bright);
+  color: var(--button-text);
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  letter-spacing: 1.5px;
+  transition: background-color 0.3s;
+}
+
+.login-form-side button:hover {
+  background-color: #16a34a;
+}
+
+.login-image-side {
+  flex: 1;
+  margin: 0; 
+  background-image: url("/static/images/4a71755a-578c-49c3-a31c-e7671f7c151d.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 0 20px  20px 0;
+}
+
+
+@media(max-width: 768px) {
+  .login-wrapper {
+    flex-direction: column;
+    max-width: 100%;
+    height: auto;
+  }
+  .login-image-side {
+    height: 250px;
+  }
+}
