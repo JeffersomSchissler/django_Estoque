@@ -123,8 +123,8 @@ body, html {
 .login-image-side {
   flex: 1;
   margin: 0; 
-  background-image: url("/static/images/4a71755a-578c-49c3-a31c-e7671f7c151d.jpg");
-  background-size: contain;
+  background-image: url("/static/images/ChatGPT Image 27 de fev. de 2026, 23_17_09.png");
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 0 20px  20px 0;
@@ -140,4 +140,14 @@ body, html {
   .login-image-side {
     height: 250px;
   }
+}
+
+.login-error {
+  width: 100%;
+  background-color: rgba(255, 77, 77, 0.1);
+  color: #ff4d4d;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  text-align: center;
 }
