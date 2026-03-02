@@ -20,6 +20,8 @@ class Produto(models.Model):
     description = models.TextField(max_length=200, null=True, blank=True)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Categoria, on_delete=PROTECT)
+    sku = models.CharField(max_length=200, null=True, blank=True)
+    Inventory_quantity = models.IntegerField(default=0)
     creation_date = models.DateField(auto_now_add=True)
     update_date = models.DateField(auto_now=True)
 

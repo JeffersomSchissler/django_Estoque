@@ -4,11 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth import logout
-
-
-@login_required
-def dashboard(request):
-    return render(request, 'dashboard.html')
+from .models import Produto
 
 def login_view(request):
     if request.method == 'POST':
@@ -21,11 +17,42 @@ def login_view(request):
             login(request, user)
             return redirect('dashboard')
         else:
-            messages.error(request, 'Invalid username or password')
+            messages.error(request, 'Usuário ou senha inválidos')
             return redirect('login')
-
+        
     return render(request, 'login.html')
 
+@login_required
+def dashboard(request):
+    return render(request, 'dashboard.html')
+
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('/accounts/login/')  
+
+
+@login_required
+def product_view(request):
+    product = Produto.objects.all()
+
+    return render(request, 'cadastro_produtos.html',
+        {
+        'product': product
+            })
+
+
+@login_required
+def search_bar_view(request):
+    query = request.GET.get('q')
+
+    if query:
+        product = Produto.objects.filter(name__icontains=query)
+    else:
+        product = Produto.objects.all()
+
+    return render(request, 'cadastro_produtos.html',
+        {
+        'product': product
+            })
+

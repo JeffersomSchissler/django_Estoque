@@ -1,0 +1,9 @@
+<div class="conteiner-main">
+    <ul>
+        {% for prod in product %}
+            <li>{{ prod.name }}</li>
+        {% empty %}
+            <h3>No Products serch</h3>
+        {% endfor %}
+    </ul>
+</div>

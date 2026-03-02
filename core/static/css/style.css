@@ -124,7 +124,7 @@ body, html {
   flex: 1;
   margin: 0; 
   background-image: url("/static/images/ChatGPT Image 27 de fev. de 2026, 23_17_09.png");
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 0 20px  20px 0;
@@ -140,14 +140,4 @@ body, html {
   .login-image-side {
     height: 250px;
   }
-}
-
-.login-error {
-  width: 100%;
-  background-color: rgba(255, 77, 77, 0.1);
-  color: #ff4d4d;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 15px;
-  text-align: center;
 }
