@@ -51,8 +51,13 @@ def search_bar_view(request):
     else:
         product = Produto.objects.all()
 
-    return render(request, 'cadastro_produtos.html',
-        {
-        'product': product
-            })
+    # Verifica se a requisição veio do HTMX
+    is_htmx = request.headers.get('HX-Request') == 'true'
+
+    if is_htmx:
+        # Retorna apenas o fragmento da tabela (sem header/base)
+        return render(request, 'carrega_produtos.html', {'product': product})
+    
+    # Requisição normal - retorna página completa
+    return render(request, 'cadastro_produtos.html', {'product': product})
 

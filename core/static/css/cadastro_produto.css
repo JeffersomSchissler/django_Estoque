@@ -81,6 +81,11 @@ header {
     font-weight: 600;
 }
 
+.menu{
+    display: flex;
+    background-color: #e5e7eb;
+}
+
 /* MAIN */
 main {
     padding: 2rem;
