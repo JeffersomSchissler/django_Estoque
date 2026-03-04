@@ -1,82 +1,18 @@
+{% extends "base.html" %}
+
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cadastro de Produtos</title>
-  <link rel="stylesheet" href="{% static 'css/cadastro_de_produtos.css' %}">
-</head>
+{% block content %}
 
-<body>
-  <header>
-    <div class="container-header">
-      <h3 class="logo-nome">test stock</h3>
+<div class="toolbar">
+    <div class="page-title">Produtos</div>
 
-      <div class="logout-usuario">
-        <details>
-          <summary>Usuário ▾</summary>
-          <div class="menu">
-            <a href="#">Perfil</a>
-            <a href="#">Sair</a>
-          </div>
-        </details>
-      </div>
-    </div>
+    <a href="#" class="btn-primary">
+        + Novo Produto
+    </a>
+</div>
 
-    <div class="search-row">
-      <input 
-        type="text" 
-        name="q" 
-        placeholder="Buscar..." 
-        hx-get="{% url 'cadastro_de_produtos' %}" 
-        hx-trigger="keyup changed delay:300ms" 
-        hx-target="#resultado"
-      />
-    </div>
-  </header>
+<div id="resultado">
+    {% include "carrega_produtos.html" %}
+</div>
 
-  <main>
-    <div class="toolbar">
-      <div class="title">Produtos</div>
-      <div class="actions"></div>
-    </div>
-
-    <div id="resultado">
-
-      <article class="product-card">
-        <div class="media">Imagem</div>
-        <div class="meta">
-          <div>
-            <div class="name">Nome do produto</div>
-            <div class="sku">SKU: —</div>
-          </div>
-          <div class="placeholder short"></div>
-        </div>
-        <div class="meta2">
-          <div class="placeholder medium"></div>
-          <div class="placeholder short"></div>
-        </div>
-      </article>
-
-      <article class="product-card">
-        <div class="media">Imagem</div>
-        <div class="meta">
-          <div>
-            <div class="name">Nome do produto</div>
-            <div class="sku">SKU: —</div>
-          </div>
-          <div class="placeholder short"></div>
-        </div>
-        <div class="meta2">
-          <div class="placeholder medium"></div>
-          <div class="placeholder short"></div>
-        </div>
-      </article>
-
-    </div>
-  </main>
-
-  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-</body>
-</html>
+{% endblock %}

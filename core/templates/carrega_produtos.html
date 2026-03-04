@@ -1,9 +1,49 @@
-<div class="conteiner-main">
-    <ul>
+<div class="table-wrapper">
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>SKU</th>
+            <th>Estoque</th>
+            <th>Preço</th>
+            <th>Criado</th>
+        </tr>
+    </thead>
+
+    <tbody>
         {% for prod in product %}
-            <li>{{ prod.name }}</li>
+        <tr>
+            <td class="col-name">{{ prod.name }}</td>
+            <td>{{ prod.category }}</td>
+            <td class="col-sku">{{ prod.sku }}</td>
+
+            <td>
+                {% if prod.inventory_quantity > 10 %}
+                    <span class="stock-badge in-stock">
+                        {{ prod.inventory_quantity }} un
+                    </span>
+                {% elif prod.inventory_quantity > 0 %}
+                    <span class="stock-badge low-stock">
+                        {{ prod.inventory_quantity }} un
+                    </span>
+                {% else %}
+                    <span class="stock-badge out-stock">
+                        0 un
+                    </span>
+                {% endif %}
+            </td>
+
+            <td class="price">R$ {{ prod.unit_price }}</td>
+            <td>{{ prod.creation_date|date:"d/m/Y" }}</td>
+        </tr>
         {% empty %}
-            <h3>No Products serch</h3>
+        <tr>
+            <td colspan="6" class="empty">
+                Nenhum produto encontrado
+            </td>
+        </tr>
         {% endfor %}
-    </ul>
+    </tbody>
+</table>
 </div>
