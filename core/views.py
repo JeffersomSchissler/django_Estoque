@@ -4,7 +4,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from .models import Produto
+from .forms import ProdutoForm
+from .models import Categoria
+from .ai_services import process_user_message
 
 def login_view(request):
     if request.method == 'POST':
@@ -60,4 +65,52 @@ def search_bar_view(request):
     
     # Requisição normal - retorna página completa
     return render(request, 'cadastro_produtos.html', {'product': product})
+
+
+@login_required
+def adicionar_novo_produto(request):
+    return render(request, 'cadastrar_novo_produto.html')
+
+@login_required
+def cadastrar_produto(request):
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('cadastro_de_produtos')  # altere para a URL da lista de produtos
+    else:
+        form = ProdutoForm()
+
+    categorias = Categoria.objects.all()  # para preencher o select de categoria
+    return render(request, 'cadastrar_novo_produto.html', {'form': form, 'categorias': categorias})
+    
+
+
+@login_required
+@csrf_exempt
+def ai_assistant_view(request):
+    """
+    View para processar mensagens do assistente de IA
+    """
+    if request.method == 'POST':
+        import json
+        try:
+            data = json.loads(request.body)
+            message = data.get('message', '')
+            
+            if not message:
+                return JsonResponse({'error': 'Mensagem vazia'}, status=400)
+            
+            # Processa a mensagem usando o serviço de IA
+            response = process_user_message(message)
+            
+            return JsonResponse({'response': response})
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'JSON inválido'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    
+    # Se for GET, retorna a página do assistente
+    return render(request, 'ai_assistant.html')
 

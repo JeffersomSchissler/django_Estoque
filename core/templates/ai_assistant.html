@@ -1,0 +1,385 @@
+{% extends 'base.html' %}
+
+{% block title %}Assistente Virtual - IA{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos do Chat de IA - Dark Theme */
+    .chat-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        height: calc(100vh - 180px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px 15px 0 0;
+        text-align: center;
+    }
+
+    .chat-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .chat-header p {
+        margin: 5px 0 0;
+        opacity: 0.9;
+        font-size: 0.9rem;
+    }
+
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        background: #163a70;
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .message {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .message.user {
+        justify-content: flex-end;
+    }
+
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    .message.bot .message-avatar {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+    }
+
+    .message.user .message-avatar {
+        background: #60a5fa;
+        color: white;
+        margin-right: 0;
+        margin-left: 10px;
+    }
+
+    .message-content {
+        max-width: 70%;
+        padding: 12px 16px;
+        border-radius: 15px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        font-size: 0.95rem;
+    }
+
+    .message.bot .message-content {
+        background: #112d56;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 0 15px 15px 15px;
+        color: #e5e7eb;
+    }
+
+    .message.user .message-content {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        border-radius: 15px 0 15px 15px;
+    }
+
+    .message-content strong {
+        color: #22c55e;
+    }
+    
+    .message.user .message-content strong {
+        color: white;
+    }
+
+    .chat-input-container {
+        background: #112d56;
+        padding: 20px;
+        border-radius: 0 0 15px 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: none;
+    }
+
+    .chat-input-wrapper {
+        display: flex;
+        gap: 10px;
+    }
+
+    .chat-input {
+        flex: 1;
+        padding: 15px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 25px;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.3s;
+        background: #1f2937;
+        color: #e5e7eb;
+    }
+
+    .chat-input:focus {
+        border-color: #22c55e;
+    }
+
+    .chat-input::placeholder {
+        color: #94a3b8;
+    }
+
+    .chat-send-btn {
+        padding: 15px 30px;
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .chat-send-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+    }
+
+    .chat-send-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .quick-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .quick-action-btn {
+        padding: 8px 15px;
+        background: #1f2937;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: #e5e7eb;
+        transition: all 0.2s;
+    }
+
+    .quick-action-btn:hover {
+        background: #22c55e;
+        color: white;
+        border-color: #22c55e;
+    }
+
+    .loading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .loading-dots {
+        display: flex;
+        gap: 5px;
+    }
+
+    .loading-dots span {
+        width: 8px;
+        height: 8px;
+        background: #22c55e;
+        border-radius: 50%;
+        animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes bounce {
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1); }
+    }
+
+    /* Animações */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message {
+        animation: fadeIn 0.3s ease-out;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header">
+        <h2>🤖 Assistente Virtual de Estoque</h2>
+        <p>Posso ajudá-lo a gerenciar produtos, verificar estoque e muito mais!</p>
+    </div>
+    
+    <div class="chat-messages" id="chatMessages">
+        <div class="message bot">
+            <div class="message-avatar">🤖</div>
+            <div class="message-content">
+Olá! Sou o assistente virtual do seu sistema de estoque. 
+
+Posso ajudá-lo com:
+
+📦 <strong>Produtos</strong> - Listar, buscar e filtrar produtos
+⚠️ <strong>Estoque</strong> - Verificar produtos com estoque baixo
+📊 <strong>Dashboard</strong> - Ver estatísticas do sistema
+📦 <strong>Fornecedores</strong> - Listar fornecedores cadastrados
+📜 <strong>Movimentos</strong> - Ver histórico de entradas/saídas
+
+Como posso ajudá-lo hoje?</div>
+        </div>
+    </div>
+    
+    <div class="chat-input-container">
+        <div class="quick-actions">
+            <button class="quick-action-btn" onclick="sendQuickMessage('estoque baixo')">⚠️ Estoque Baixo</button>
+            <button class="quick-action-btn" onclick="sendQuickMessage('listar produtos')">📦 Listar Produtos</button>
+            <button class="quick-action-btn" onclick="sendQuickMessage('dashboard')">📊 Dashboard</button>
+            <button class="quick-action-btn" onclick="sendQuickMessage('fornecedores')">🏢 Fornecedores</button>
+            <button class="quick-action-btn" onclick="sendQuickMessage('movimentos')">📜 Movimentos</button>
+            <button class="quick-action-btn" onclick="sendQuickMessage('ajuda')">❓ Ajuda</button>
+        </div>
+        <div class="chat-input-wrapper">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Digite sua mensagem..." onkeypress="handleKeyPress(event)">
+            <button class="chat-send-btn" id="sendBtn" onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    function sendQuickMessage(message) {
+        chatInput.value = message;
+        sendMessage();
+    }
+
+    async function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // Adicionar mensagem do usuário
+        addMessage(message, 'user');
+        chatInput.value = '';
+
+        // Mostrar indicador de carregamento
+        const loadingId = showLoading();
+
+        try {
+            const response = await fetch('/ai-assistant/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ message: message })
+            });
+
+            const data = await response.json();
+            
+            // Remover indicador de carregamento
+            removeLoading(loadingId);
+
+            if (data.response) {
+                addMessage(data.response, 'bot');
+            } else if (data.error) {
+                addMessage('❌ Erro: ' + data.error, 'bot');
+            }
+        } catch (error) {
+            removeLoading(loadingId);
+            addMessage('❌ Erro ao conectar com o servidor. Tente novamente.', 'bot');
+        }
+    }
+
+    function addMessage(content, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        
+        const avatar = sender === 'user' ? '👤' : '🤖';
+        
+        messageDiv.innerHTML = `
+            <div class="message-avatar">${avatar}</div>
+            <div class="message-content">${content}</div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showLoading() {
+        const loadingId = 'loading-' + Date.now();
+        const loadingDiv = document.createElement('div');
+        loadingDiv.id = loadingId;
+        loadingDiv.className = 'message bot';
+        loadingDiv.innerHTML = `
+            <div class="message-avatar">🤖</div>
+            <div class="message-content">
+                <div class="loading">
+                    <div class="loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    Pensando...
+                </div>
+            </div>
+        `;
+        chatMessages.appendChild(loadingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return loadingId;
+    }
+
+    function removeLoading(loadingId) {
+        const loadingDiv = document.getElementById(loadingId);
+        if (loadingDiv) {
+            loadingDiv.remove();
+        }
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}
+

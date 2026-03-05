@@ -8,6 +8,8 @@
 
     <link rel="stylesheet" href="{% static 'css/cadastro_produto.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css">
+    {% block extra_css %}{% endblock %}
 </head>
 
 <body>
@@ -20,27 +22,37 @@
 
     <nav class="sidebar-menu">
 
-        <a href="#" class="menu-item active">
-              Dashboard
-        </a>
+    <a href="{% url 'dashboard' %}" class="menu-item {% if request.path == '/dashboard/' %}active{% endif %}">
+        <i class="fi fi-br-chart-line-up"></i>
+        <span>Dashboard</span>
+    </a>
 
-        <a href="#" class="menu-item">
-              Produtos
-        </a>
+    <a href="{% url 'cadastro_de_produtos' %}" class="menu-item {% if '/cadastroItem/' in request.path %}active{% endif %}">
+        <i class="fi fi-br-box"></i>
+        <span>Produtos</span>
+    </a>
+    
+    <a href="{% url 'ai_assistant' %}" class="menu-item {% if '/ai-assistant/' in request.path %}active{% endif %}">
+        <i class="fi fi-br-brain"></i>
+        <span>IA Assistente</span>
+    </a>
 
-        <a href="#" class="menu-item">
-              Estoque
-        </a>
+    <a href="#" class="menu-item">
+        <i class="fi fi-bs-truck-moving"></i>
+        <span>Estoque</span>
+    </a>
 
-        <a href="#" class="menu-item">
-              Relatórios
-        </a>
+    <a href="#" class="menu-item">
+        <i class="fi fi-br-chart-histogram"></i>
+        <span>Relatórios</span>
+    </a>
 
-        <a href="#" class="menu-item">
-              Usuários
-        </a>
+    <a href="#" class="menu-item">
+        <i class="fi fi-br-users"></i>
+        <span>Usuários</span>
+    </a>
 
-    </nav>
+</nav>
 
 </div>
 
@@ -85,6 +97,7 @@
 </div>
 
 <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+{% block extra_js %}{% endblock %}
 
 </body>
 </html>

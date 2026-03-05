@@ -8,6 +8,7 @@
             <th>Estoque</th>
             <th>Preço</th>
             <th>Criado</th>
+            <th>Ações</th>
         </tr>
     </thead>
 
@@ -36,10 +37,19 @@
 
             <td class="price">R$ {{ prod.unit_price }}</td>
             <td>{{ prod.creation_date|date:"d/m/Y" }}</td>
+            
+            <td class="actions">
+                <a href="#" class="btn-action btn-edit" title="Editar">
+                    ✏️
+                </a>
+                <a href="#" class="btn-action btn-delete" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir o produto {{ prod.name }}?')">
+                    🗑️
+                </a>
+            </td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="6" class="empty">
+            <td colspan="7" class="empty">
                 Nenhum produto encontrado
             </td>
         </tr>
