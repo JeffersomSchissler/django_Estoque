@@ -24,7 +24,59 @@ body {
     min-height: 100vh;
 }
 
+/* SIDEBAR */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 100vh;
+    background: var(--blue-dark-2);
+    border-right: 1px solid var(--border-color);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.menu-item {
+    text-decoration: none;
+    color: var(--input-text);
+    padding: 10px 14px;
+    border-radius: 8px;
+    transition: 0.2s;
+    font-size: 0.95rem;
+}
+
+.menu-item:hover {
+    background: var(--blue-dark-3);
+}
+
+.menu-item.active {
+    background: var(--blue-dark-3);
+    border-left: 3px solid var(--green-bright);
+}
+
+/* LAYOUT */
+
+.layout {
+    margin-left: 240px;
+}
+
 /* HEADER */
+
 header {
     background: rgba(10, 35, 66, 0.95);
     backdrop-filter: blur(10px);
@@ -63,6 +115,7 @@ header {
 }
 
 /* USER */
+
 .user-trigger {
     cursor: pointer;
     display: flex;
@@ -81,12 +134,35 @@ header {
     font-weight: 600;
 }
 
-.menu{
+.user-menu details {
+    position: relative;
+}
+
+.menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
     display: flex;
-    background-color: #e5e7eb;
+    flex-direction: column;
+    background: #e5e7eb;
+    padding: 8px;
+    gap: 6px;
+    min-width: 120px;
+    border-radius: 6px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #111;
+    padding: 6px;
+}
+
+.menu a:hover {
+    background: #d1d5db;
 }
 
 /* MAIN */
+
 main {
     padding: 2rem;
     max-width: 1400px;
@@ -94,6 +170,7 @@ main {
 }
 
 /* TOOLBAR */
+
 .toolbar {
     display: flex;
     justify-content: space-between;
@@ -121,6 +198,7 @@ main {
 }
 
 /* TABLE */
+
 .table-wrapper {
     background: var(--blue-dark-3);
     border-radius: 16px;
@@ -169,6 +247,7 @@ tbody tr:hover {
 }
 
 /* STOCK BADGES */
+
 .stock-badge {
     padding: 4px 10px;
     border-radius: 20px;

@@ -1,17 +1,55 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Test Stock</title>
+
     <link rel="stylesheet" href="{% static 'css/cadastro_produto.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
+<div class="sidebar">
+
+    <div class="sidebar-logo">
+          Test Stock
+    </div>
+
+    <nav class="sidebar-menu">
+
+        <a href="#" class="menu-item active">
+              Dashboard
+        </a>
+
+        <a href="#" class="menu-item">
+              Produtos
+        </a>
+
+        <a href="#" class="menu-item">
+              Estoque
+        </a>
+
+        <a href="#" class="menu-item">
+              Relatórios
+        </a>
+
+        <a href="#" class="menu-item">
+              Usuários
+        </a>
+
+    </nav>
+
+</div>
+
+<div class="layout">
+
 <header>
-    <div class="logo-nome">📦 Test Stock</div>
+
+    <div class="logo-nome">
+    </div>
 
     <div class="search-container">
         <input type="text"
@@ -28,12 +66,15 @@
                 <div class="avatar">US</div>
                 Usuário
             </summary>
+
             <menu class="menu">
                 <a href="#">Perfil</a>
                 <a href="{% url 'logout' %}">Sair</a>
             </menu>
+
         </details>
     </div>
+
 </header>
 
 <main>
@@ -41,6 +82,9 @@
     {% endblock %}
 </main>
 
+</div>
+
 <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+
 </body>
 </html>
