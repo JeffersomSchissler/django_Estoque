@@ -172,6 +172,7 @@
             <div class="card-icon">📂</div>
             <div class="card-title">Categorias</div>
             <div class="card-value">{{ total_categorias|default:"0" }}</div>
+            <a href="{% url 'listar_categorias' %}" class="card-link">Listar categorias →</a>
         </div>
         
         <!-- Card de Fornecedores -->
@@ -179,6 +180,7 @@
             <div class="card-icon">🏢</div>
             <div class="card-title">Fornecedores</div>
             <div class="card-value">{{ total_fornecedores|default:"0" }}</div>
+            <a href="#" class="card-link">Ver fornecedores →</a>
         </div>
     </div>
     

@@ -7,7 +7,9 @@ from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Produto
+from .models import Fornecedor
 from .forms import ProdutoForm
+from .forms import CategoryForms
 from .models import Categoria
 from .ai_services import process_user_message
 
@@ -29,7 +31,16 @@ def login_view(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    total_produtos = Produto.objects.count()
+    total_categorias = Categoria.objects.count()
+    total_fornecedores = Fornecedor.objects.count()
+
+    context = {
+        'total_produtos': total_produtos,
+        'total_categorias': total_categorias,
+        'total_fornecedores': total_fornecedores
+        }
+    return render(request, 'dashboard.html', context)
 
 @login_required
 def logout_view(request):
@@ -68,8 +79,17 @@ def search_bar_view(request):
 
 
 @login_required
+def listar_categorias(request):
+    categoria = Categoria.objects.all()
+
+    return render(request, 'tela_cadastro_de_categoria.html', {'category': categoria})
+
+@login_required
 def adicionar_novo_produto(request):
     return render(request, 'cadastrar_novo_produto.html')
+
+def cadastrar_nova_categoria(request):
+    return render(request, 'cadastro_categoria.html')
 
 @login_required
 def cadastrar_produto(request):
@@ -83,6 +103,19 @@ def cadastrar_produto(request):
 
     categorias = Categoria.objects.all()  # para preencher o select de categoria
     return render(request, 'cadastrar_novo_produto.html', {'form': form, 'categorias': categorias})
+
+@login_required
+def cadastrar_categoria(request):
+    if request.method == 'POST':
+        form = CategoryForms(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_categorias')  
+    else:
+        form = CategoryForms()
+
+    return render(request, 'cadastro_categoria.html', {'form': form})
+
     
 
 

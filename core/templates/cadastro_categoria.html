@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastrar Nova Categoria - Sistema de Estoque{% endblock %}
+
+{% block extra_css %}
+<style>
+.form-container { background: #163a70; border-radius: 16px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.1); max-width: 700px; margin: 0 auto; } .form-header { margin-bottom: 30px; text-align: center; } .form-header h1 { color: #e5e7eb; font-size: 1.8rem; margin-bottom: 10px; } .form-header p { color: #94a3b8; } .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } .form-group { margin-bottom: 20px; } .form-group.full-width { grid-column: span 2; } .form-group label { display: block; color: #e5e7eb; margin-bottom: 8px; font-weight: 500; } .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); background: #1f2937; color: #e5e7eb; font-size: 1rem; font-family: 'Inter', sans-serif; } .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #22c55e; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2); } .form-group input::placeholder, .form-group textarea::placeholder { color: #94a3b8; } .form-group select { cursor: pointer; } .form-group textarea { resize: vertical; min-height: 100px; } .form-actions { display: flex; gap: 15px; margin-top: 30px; justify-content: center; } .btn-submit { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; padding: 14px 40px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; } .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4); } .btn-cancel { background: transparent; color: #94a3b8; padding: 14px 30px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: all 0.2s; } .btn-cancel:hover { background: rgba(255, 255, 255, 0.05); color: #e5e7eb; } .form-row { display: flex; gap: 20px; } .form-row .form-group { flex: 1; } .info-icon { display: inline-block; width: 18px; height: 18px; background: #60a5fa; border-radius: 50%; text-align: center; line-height: 18px; font-size: 12px; margin-left: 5px; cursor: help; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-header">
+        <h1>➕ Cadastrar Nova Categoria</h1>
+        <p>Preencha os dados abaixo para adicionar uma nova Categoria</p>
+    </div>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+
+        <div class="form-grid">
+            <div class="form-group full-width">
+                {{ form.name.label_tag }}
+                {{ form.name }}
+                {% if form.name.errors %}
+                    <div class="error">{{ form.name.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group full-width">
+                {{ form.description.label_tag }}
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="error">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">💾 Salvar Produto</button>
+            <a href="{% url 'cadastro_de_produtos' %}" class="btn-cancel">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

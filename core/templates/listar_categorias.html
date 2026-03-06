@@ -1,0 +1,40 @@
+{% block content %}
+<div class="table-wrapper">
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for categ in category %}
+        <tr>
+            <td class="col-name">{{ categ.name }}</td>
+
+            <td class="descripcion">{{ categ.descripcion }}</td>
+            
+            <td class="actions">
+                <a href="#" class="btn-action btn-edit" title="Editar">
+                    ✏️
+                </a>
+                <a href="#" class="btn-action btn-delete" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir o produto {{ categ.name }}?')">
+                    🗑️
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="empty">
+                Nenhuma Categoria encontrada
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
+

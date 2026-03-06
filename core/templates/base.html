@@ -37,9 +37,19 @@
         <span>IA Assistente</span>
     </a>
 
+    <a href="{% url 'listar_categorias' %}" class="menu-item {% if '/cadastroCategoria/' in request.path %}active{% endif %}">
+        <i class="fi fi-bs-truck-moving"></i>
+        <span>Categorias</span>
+    </a>
+
     <a href="#" class="menu-item">
         <i class="fi fi-bs-truck-moving"></i>
         <span>Estoque</span>
+    </a>
+
+    <a href="#" class="menu-item">
+        <i class="fi fi-bs-truck-moving"></i>
+        <span>Fornecedores</span>
     </a>
 
     <a href="#" class="menu-item">
