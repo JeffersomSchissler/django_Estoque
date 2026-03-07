@@ -12,6 +12,8 @@ from .forms import ProdutoForm
 from .forms import CategoryForms
 from .models import Categoria
 from .ai_services import process_user_message
+from django.db.models import Count
+import json
 
 def login_view(request):
     if request.method == 'POST':
@@ -34,12 +36,22 @@ def dashboard(request):
     total_produtos = Produto.objects.count()
     total_categorias = Categoria.objects.count()
     total_fornecedores = Fornecedor.objects.count()
+    
+    # Gráfico de produtos por categoria
+    produtos_por_categoria = Categoria.objects.annotate(total_produtos=Count('produto'))
+    
+    # Gráfico de produtos com estoque baixo (ex: < 10 unidades)
+    produtos_estoque_baixo = Produto.objects.filter(Inventory_quantity__lt=10)
 
     context = {
         'total_produtos': total_produtos,
         'total_categorias': total_categorias,
-        'total_fornecedores': total_fornecedores
-        }
+        'total_fornecedores': total_fornecedores,
+        'produtos_por_categoria_labels': json.dumps([c.name for c in produtos_por_categoria]),
+        'produtos_por_categoria_data': json.dumps([c.total_produtos for c in produtos_por_categoria]),
+        'produtos_estoque_baixo_labels': json.dumps([p.name for p in produtos_estoque_baixo]),
+        'produtos_estoque_baixo_data': json.dumps([p.Inventory_quantity for p in produtos_estoque_baixo]),
+    }
     return render(request, 'dashboard.html', context)
 
 @login_required

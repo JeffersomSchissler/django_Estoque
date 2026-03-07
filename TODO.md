@@ -23,7 +23,7 @@
 ## 🔴 Pendentes (Backlog)
 
 ### 1. Cadastro de Produtos (Backend)
-- [ ] Criar view para salvar novo produto
+- [x] Criar view para salvar novo produto
 - [ ] Formatar/preencher categorias no select
 - [ ] Formatar/preencher fornecedores no select
 - [ ] Validações de formulário
