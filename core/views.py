@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.views.generic import UpdateView
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -57,7 +58,13 @@ def dashboard(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('/accounts/login/')  
+    return redirect('/accounts/login/') 
+
+@login_required
+class ProdutoUpdateView(UpdateView):
+    model = Produto
+    fields = ['nome', 'preco']
+    template_name = 'editar_produto.html'
 
 
 @login_required

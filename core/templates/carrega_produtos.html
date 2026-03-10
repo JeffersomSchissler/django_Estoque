@@ -39,7 +39,7 @@
             <td>{{ prod.creation_date|date:"d/m/Y" }}</td>
             
             <td class="actions">
-                <a href="#" class="btn-action btn-edit" title="Editar">
+                <a href="{% url 'editar_produto' prod.id %}" class="btn-action btn-edit" title="Editar">
                     ✏️
                 </a>
                 <a href="#" class="btn-action btn-delete" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir o produto {{ prod.name }}?')">
