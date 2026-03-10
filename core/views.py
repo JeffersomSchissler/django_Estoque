@@ -2,18 +2,14 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Produto
-from .models import Fornecedor
-from .forms import ProdutoForm
-from .forms import CategoryForms
-from .models import Categoria
+from .models import Produto, Fornecedor, Categoria
+from .forms import ProdutoForm, CategoryForms
 from .ai_services import process_user_message
-from django.db.models import Count
+from django.db.models import Count, Sum
 import json
 
 def login_view(request):
@@ -37,12 +33,21 @@ def dashboard(request):
     total_produtos = Produto.objects.count()
     total_categorias = Categoria.objects.count()
     total_fornecedores = Fornecedor.objects.count()
+    soma_de_valores_unitarios = Produto.objects.aggregate(total=Sum('unit_price'))['total'] or 0
+
+    #5 produtos com mais estoque kkk
+    ordena_produtos_por_quatidade = Produto.objects.order_by('Inventory_quantity')
+    primeiros_registros = ordena_produtos_por_quatidade[:5]
+
+    # Valor total do estoque
+    soma_em_estoque = total_produtos + soma_de_valores_unitarios
     
     # Gráfico de produtos por categoria
     produtos_por_categoria = Categoria.objects.annotate(total_produtos=Count('produto'))
     
     # Gráfico de produtos com estoque baixo (ex: < 10 unidades)
     produtos_estoque_baixo = Produto.objects.filter(Inventory_quantity__lt=10)
+
 
     context = {
         'total_produtos': total_produtos,
@@ -52,7 +57,11 @@ def dashboard(request):
         'produtos_por_categoria_data': json.dumps([c.total_produtos for c in produtos_por_categoria]),
         'produtos_estoque_baixo_labels': json.dumps([p.name for p in produtos_estoque_baixo]),
         'produtos_estoque_baixo_data': json.dumps([p.Inventory_quantity for p in produtos_estoque_baixo]),
+        'total_em_estoque': soma_em_estoque,
+        'ordena_registros': json.dumps([produto.Inventory_quantity for produto in primeiros_registros]),
+        'primeiros_registros': json.dumps([produto.name for produto in primeiros_registros]),
     }
+
     return render(request, 'dashboard.html', context)
 
 @login_required
@@ -60,10 +69,10 @@ def logout_view(request):
     logout(request)
     return redirect('/accounts/login/') 
 
-@login_required
+
 class ProdutoUpdateView(UpdateView):
     model = Produto
-    fields = ['nome', 'preco']
+    fields = ['name', 'unit_price']
     template_name = 'editar_produto.html'
 
 

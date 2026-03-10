@@ -20,13 +20,13 @@
             <td class="col-sku">{{ prod.sku }}</td>
 
             <td>
-                {% if prod.inventory_quantity > 10 %}
+                {% if prod.Inventory_quantity > 10 %}
                     <span class="stock-badge in-stock">
-                        {{ prod.inventory_quantity }} un
+                        {{ prod.Inventory_quantity }} un
                     </span>
-                {% elif prod.inventory_quantity > 0 %}
+                {% elif prod.Inventory_quantity > 0 %}
                     <span class="stock-badge low-stock">
-                        {{ prod.inventory_quantity }} un
+                        {{ prod.Inventory_quantity }} un
                     </span>
                 {% else %}
                     <span class="stock-badge out-stock">

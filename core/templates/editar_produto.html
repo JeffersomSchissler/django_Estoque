@@ -1,7 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <h2>Editar Produto</h2>
 
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Salvar</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>SKU</th>
+                <th>Estoque</th>
+                <th>Preço</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ form.name }}</td>
+                <td>{{ form.category }}</td>
+                <td>{{ form.sku }}</td>
+                <td>{{ form.Inventory_quantity }}</td>
+                <td>R$ {{ form.unit_price }}</td>
+                <td><button type="submit">✔️</button></td>
+                <td><a href="{ url 'cadastroItem' }">❌</a></td>
+            </tr>
+        </tbody>
+    </table>
 </form>
+{% endblock %}
