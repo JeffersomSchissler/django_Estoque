@@ -1,59 +1,60 @@
 <div class="table-wrapper">
-<table>
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Categoria</th>
-            <th>SKU</th>
-            <th>Estoque</th>
-            <th>Preço</th>
-            <th>Criado</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>SKU</th>
+                <th>Estoque</th>
+                <th>Preço</th>
+                <th>Criado</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
 
-    <tbody>
-        {% for prod in product %}
-        <tr>
-            <td class="col-name">{{ prod.name }}</td>
-            <td>{{ prod.category }}</td>
-            <td class="col-sku">{{ prod.sku }}</td>
+        <tbody>
+            {% for prod in product %}
+            <tr>
+                <td class="col-name">{{ prod.name }}</td>
+                <td>{{ prod.category }}</td>
+                <td class="col-sku">{{ prod.sku }}</td>
 
-            <td>
-                {% if prod.Inventory_quantity > 10 %}
+                <td>
+                    {% if prod.Inventory_quantity > 10 %}
                     <span class="stock-badge in-stock">
                         {{ prod.Inventory_quantity }} un
                     </span>
-                {% elif prod.Inventory_quantity > 0 %}
+                    {% elif prod.Inventory_quantity > 0 %}
                     <span class="stock-badge low-stock">
                         {{ prod.Inventory_quantity }} un
                     </span>
-                {% else %}
+                    {% else %}
                     <span class="stock-badge out-stock">
                         0 un
                     </span>
-                {% endif %}
-            </td>
+                    {% endif %}
+                </td>
 
-            <td class="price">R$ {{ prod.unit_price }}</td>
-            <td>{{ prod.creation_date|date:"d/m/Y" }}</td>
-            
-            <td class="actions">
-                <a href="{% url 'editar_produto' prod.id %}" class="btn-action btn-edit" title="Editar">
-                    ✏️
-                </a>
-                <a href="#" class="btn-action btn-delete" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir o produto {{ prod.name }}?')">
-                    🗑️
-                </a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="7" class="empty">
-                Nenhum produto encontrado
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                <td class="price">R$ {{ prod.unit_price }}</td>
+                <td>{{ prod.creation_date|date:"d/m/Y" }}</td>
+
+                <td class="actions">
+                    <a href="{% url 'editar_produto' prod.id %}" class="btn-action btn-edit" title="Editar">
+                        ✏️
+                    </a>
+                    <a href="#" class="btn-action btn-delete" title="Excluir"
+                        onclick="return confirm('Tem certeza que deseja excluir o produto {{ prod.name }}?')">
+                        🗑️
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="empty">
+                    Nenhum produto encontrado
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
