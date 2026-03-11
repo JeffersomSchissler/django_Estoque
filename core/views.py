@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
@@ -72,9 +73,9 @@ def logout_view(request):
 
 class ProdutoUpdateView(UpdateView):
     model = Produto
-    fields = ['name', 'unit_price']
+    fields = ['name', 'unit_price', 'category', 'sku', 'Inventory_quantity']
     template_name = 'editar_produto.html'
-
+    success_url = reverse_lazy('cadastro_de_produtos')
 
 @login_required
 def product_view(request):
