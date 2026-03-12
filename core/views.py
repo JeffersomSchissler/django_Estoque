@@ -11,6 +11,7 @@ from .models import Produto, Fornecedor, Categoria
 from .forms import ProdutoForm, CategoryForms
 from .ai_services import process_user_message
 from django.db.models import Count, Sum
+from django.core.paginator import Paginator
 import json
 
 def login_view(request):
@@ -80,31 +81,41 @@ class ProdutoUpdateView(UpdateView):
 @login_required
 def product_view(request):
     product = Produto.objects.all()
+    paginator = Paginator(product, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(request, 'cadastro_produtos.html',
         {
-        'product': product
+        'product': page_obj
             })
 
 
 @login_required
 def search_bar_view(request):
+    from django.core.paginator import Paginator
     query = request.GET.get('q')
+    page_number = request.GET.get('page', 1)
 
     if query:
-        product = Produto.objects.filter(name__icontains=query)
+        product_qs = Produto.objects.filter(name__icontains=query)
     else:
-        product = Produto.objects.all()
+        product_qs = Produto.objects.all()
+
+    paginator = Paginator(product_qs, 20)
+    page_obj = paginator.get_page(page_number)
 
     # Verifica se a requisição veio do HTMX
     is_htmx = request.headers.get('HX-Request') == 'true'
 
+    context = {'product': page_obj}
+
     if is_htmx:
-        # Retorna apenas o fragmento da tabela (sem header/base)
-        return render(request, 'carrega_produtos.html', {'product': product})
+        # Retorna apenas o fragmento da tabela + paginação (sem header/base)
+        return render(request, 'carrega_produtos.html', context)
     
     # Requisição normal - retorna página completa
-    return render(request, 'cadastro_produtos.html', {'product': product})
+    return render(request, 'cadastro_produtos.html', context)
 
 
 @login_required
@@ -126,11 +137,11 @@ def cadastrar_produto(request):
         form = ProdutoForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('cadastro_de_produtos')  # altere para a URL da lista de produtos
+            return redirect('cadastro_de_produtos')
     else:
         form = ProdutoForm()
 
-    categorias = Categoria.objects.all()  # para preencher o select de categoria
+    categorias = Categoria.objects.all() 
     return render(request, 'cadastrar_novo_produto.html', {'form': form, 'categorias': categorias})
 
 @login_required

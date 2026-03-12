@@ -1,7 +1,8 @@
 <div class="table-wrapper">
-    <table>
+    <table class="product-table">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Nome</th>
                 <th>Categoria</th>
                 <th>SKU</th>
@@ -15,6 +16,7 @@
         <tbody>
             {% for prod in product %}
             <tr>
+                <td class="col-identificador">{{ prod.id }}</td>
                 <td class="col-name">{{ prod.name }}</td>
                 <td>{{ prod.category }}</td>
                 <td class="col-sku">{{ prod.sku }}</td>
@@ -57,4 +59,51 @@
             {% endfor %}
         </tbody>
     </table>
+
+
+{% if product.paginator.num_pages > 1 %}
+<nav class="pagination-nav">
+    <ul class="pagination">
+
+        <li class="{% if not product.has_previous %}disabled{% endif %}">
+            <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">«</a>
+        </li>
+
+        <li class="{% if not product.has_previous %}disabled{% endif %}">
+            <a href="?page={% if product.has_previous %}{{ product.previous_page_number }}{% else %}1{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                ‹
+            </a>
+        </li>
+
+        {% for num in product.paginator.page_range %}
+            {% if product.number == num %}
+                <li class="active"><span>{{ num }}</span></li>
+            {% elif num > product.number|add:-3 and num < product.number|add:3 %}
+                <li>
+                    <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                        {{ num }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        <li class="{% if not product.has_next %}disabled{% endif %}">
+            <a href="?page={% if product.has_next %}{{ product.next_page_number }}{% else %}{{ product.paginator.num_pages }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                ›
+            </a>
+        </li>
+
+        <li class="{% if not product.has_next %}disabled{% endif %}">
+            <a href="?page={{ product.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                »
+            </a>
+        </li>
+
+    </ul>
+
+    <div class="pagination-info">
+        Página {{ product.number }} de {{ product.paginator.num_pages }}
+    </div>
+</nav>
+{% endif %}
 </div>
