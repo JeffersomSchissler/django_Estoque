@@ -37,7 +37,7 @@ def dashboard(request):
     soma_de_valores_unitarios = Produto.objects.aggregate(total=Sum('unit_price'))['total'] or 0
 
     #5 produtos com mais estoque kkk
-    ordena_produtos_por_quatidade = Produto.objects.order_by('Inventory_quantity')
+    ordena_produtos_por_quatidade = Produto.objects.order_by('-Inventory_quantity')
     primeiros_registros = ordena_produtos_por_quatidade[:5]
 
     # Valor total do estoque
@@ -47,7 +47,7 @@ def dashboard(request):
     produtos_por_categoria = Categoria.objects.annotate(total_produtos=Count('produto'))
     
     # Gráfico de produtos com estoque baixo (ex: < 10 unidades)
-    produtos_estoque_baixo = Produto.objects.filter(Inventory_quantity__lt=10)
+    produtos_estoque_baixo = Produto.objects.filter(Inventory_quantity__lt=11)
 
 
     context = {
